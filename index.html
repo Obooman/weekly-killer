@@ -8,5 +8,18 @@
 	<script src="libs/base64.js"></script>
 	<script src="js/authoration.js"></script>
 	<script src="https://apis.google.com/js/client.js?onload=checkAuth"></script>
+	<script src="js/main.js"></script>
+	<script src="js/mail.js"></script>
+	<script src="js/task.js"></script>
+	<script>
+		gmail.ready(function(){
+			var mail = new Mail();
+			mail.cc = 'cheng.12@live.cn';
+			mail.to = 'oboochin@gmail.com';
+			mail.setSubject = "你好，这是一封邮件";
+			mail.body = "这里为空";
+			mail.send();
+		})
+	</script>
 </body>
 </html>

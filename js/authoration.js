@@ -1,10 +1,21 @@
-// 放置clientId
-// 控制台地址, https://console.developers.google.com
+// console address: https://console.developers.google.com
 var CLIENT_ID = '752132420625-0q0432ijprv5f3dmkjmnigssupjudvdu.apps.googleusercontent.com';
 
+var MODULES = [
+  ['gmail','v1'],
+  ['calendar','v3']
+];
+
 var SCOPES = [
+  // Mail scopes
   'https://mail.google.com/',
-  "https://www.googleapis.com/auth/calendar"
+  "https://www.googleapis.com/auth/gmail.compose",
+  "https://www.googleapis.com/auth/gmail.modify",
+  "https://www.googleapis.com/auth/gmail.readonly",
+
+  // Calendar Scopes
+  "https://www.googleapis.com/auth/calendar",
+  "https://www.googleapis.com/auth/calendar.readonly"
 ];
 
 /**
@@ -30,14 +41,13 @@ function handleAuthResult(authResult) {
     loadGmailApi();
   } else {
     // additional UI here
-    // handleAuthClick();
+    handleAuthClick();
   }
 }
 
 /**
  * 初始化权限认证
  */
-
 function handleAuthClick() {
   gapi.auth.authorize(
     {client_id: CLIENT_ID, scope: SCOPES, immediate: false},
@@ -46,42 +56,20 @@ function handleAuthClick() {
 }
 
 /**
- * 加载gmail接口
+ * load gmail and calendar modules;
  */
 function loadGmailApi() {
-  gapi.client.load('gmail', 'v1', listLabels);
-  gapi.client.load('calendar', 'v3', listUpcomingEvents);
+  var count = 0;
 
-}
+  var cb = () => {
 
-/**
- * 示例方法，列出所有label
- */
-function listLabels() {
-  var request = gapi.client.gmail.users.labels.list({
-    'userId': 'me'
-  });
+    count++;
+    if( count == MODULES.length ){
+      gmail._ready();
+    }
+  }
 
-  request.execute(function(resp) {
-    // function success
-    console.log(resp);
-  });
-}
-
-/**
- * 示例方法，列出最近事件
- */
-function listUpcomingEvents(){
-  var request = gapi.client.calendar.events.list({
-    'calendarId': 'primary',
-    'timeMin': (new Date()).toISOString(),
-    'showDeleted': false,
-    'singleEvents': true,
-    'maxResults': 10,
-    'orderBy': 'startTime'
-  });
-
-  request.execute(function(resp) {
-    console.log(resp);
-  });
+  MODULES.forEach(function(module){
+    gapi.client.load(module[0],module[1],cb);
+  })
 }
