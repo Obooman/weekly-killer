@@ -5,6 +5,16 @@
 	<title>Weekly Killer</title>
 </head>
 <body>
+	<div class="wrapper">
+		<input type="text" id="to" name="to">
+		<input type="text" id="cc" name="cc">
+		<input type="text" id="subject" name="subject">
+		<textarea name="" id="body" cols="30" rows="10"></textarea>
+		<input type="date" id="start">
+		<input type="date" id="end">
+	</div>
+
+	<button id="send"></button>
 	<script src="libs/base64.js"></script>
 	<script src="js/authoration.js"></script>
 	<script src="https://apis.google.com/js/client.js?onload=checkAuth"></script>
@@ -12,8 +22,67 @@
 	<script src="js/mail.js"></script>
 	<script src="js/task.js"></script>
 	<script>
-		gmail.ready(function(){
+		var oTo = document.querySelector('#to');
+		var oCc = document.querySelector('#cc');
+		var oSubject = document.querySelector('#subject');
+		var oBody = document.querySelector('#body');
+		var sendButton = document.querySelector('#send');
+		var oStart = document.querySelector('#start');
+		var oEnd = document.querySelector('#end');
 
+		var {
+			to,
+			cc,
+			theSubject
+		} = JSON.parse(localStorage.getItem('items') || '{"to":"","cc":"","theSubject":""}');
+
+		oTo.value = to;
+		oCc.value = cc;
+		oSubject.value = theSubject;
+
+		gmail.ready(function(){
+			var mail = new Mail();
+
+			oEnd.onchange = function(){
+				var start = new Date(oStart.value);
+				var end = new Date(oEnd.value);
+
+				gmail.getCalendars(
+					start,
+					end,
+					function(tasks){
+						var resultStr = "";
+
+						tasks.sort(function(former,latter){
+							return (
+								new Date(former.end.dateTime.split('T')[0]) - 
+								new Date(latter.end.dateTime.split('T')[0])
+							)
+						})
+
+						tasks.forEach(function(task){
+							resultStr += `${task.end.dateTime.split('T')[0]}:\n${task.summary}\n\n`
+						})
+
+						oBody.value = resultStr;
+					}
+				);
+			}
+
+			sendButton.onclick = function(){
+				mail.to = oTo.value;
+				mail.cc = oCc.value;
+				mail.setSubject(oSubject.value)
+				mail.body = oBody.value;
+
+				localStorage.setItem('items',JSON.stringify({
+					to:oTo.value,
+					cc:oCc.value,
+					theSubject:oSubject.value
+				}))
+
+				mail.send();
+			}
 		})
 	</script>
 </body>
