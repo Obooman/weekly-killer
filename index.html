@@ -2,19 +2,46 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+	<link rel="stylesheet" href="main.css">
 	<title>Weekly Killer</title>
 </head>
 <body>
 	<div class="wrapper">
-		<input type="text" id="to" name="to">
-		<input type="text" id="cc" name="cc">
-		<input type="text" id="subject" name="subject">
+		<header>
+			<img src="statics/logo.png" alt="">
+			<div class="time">
+				<span>2017-12-2 20-10-2</span><br>
+				<span>Sunday</span>
+			</div>
+		</header>
+
+		<div class="slogan">
+			<span class="heading">Weekly Killer Here</span>
+			<br><span>Wish you a happy day</span>
+		</div>
+		<input type="search" id="to" name="to" list="mailList">
+		<input type="search" id="cc" name="cc" list="mailList">
+		<input type="search" id="subject" name="subject" list="sub">
+
+		<div id="date">
+			<input type="date" id="start">
+			<input type="date" id="end">
+		</div>
+
 		<textarea name="" id="body" cols="30" rows="10"></textarea>
-		<input type="date" id="start">
-		<input type="date" id="end">
+		<div id="send">发送</div>
+
+		<datalist id="mailList">
+			<option value="zhangzhibao@zhinengshe.com">志宝</option>
+			<option value="jiaoxue@zhinengshe.com">教学</option>
+			<option value="oboochin@gmail.com">测试</option>
+		</datalist>
+		<datalist id="sub">
+			<option value="ObooChin's teach plan">教学计划</option>
+		</datalist>
 	</div>
 
-	<button id="send"></button>
 	<script src="libs/base64.js"></script>
 	<script src="js/authoration.js"></script>
 	<script src="https://apis.google.com/js/client.js?onload=checkAuth"></script>

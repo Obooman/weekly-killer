@@ -28,7 +28,7 @@ class Mail{
 			id:this.id,
 			userId:'me'
 		})).execute(function(succ){
-			console.log('success! ->',succ);
+			alert('Done');
 		},function(fail){
 			console.log('fail! ->',fail);
 		})
