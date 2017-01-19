@@ -7,7 +7,6 @@
 	<title>Weekly Killer</title>
 </head>
 <body>
-	<div class="mailbox"></div>
 	<div class="wrapper">
 		<header>
 			<img src="statics/logo.png" alt="">
@@ -113,33 +112,6 @@
 				mail.send();
 			}
 		})
-
-		oWrapper.onmousedown = function({clientX,clientY}){
-			var disX = clientX - (this.dataset.left || 0);
-			var disY = clientY - (this.dataset.right || 0);
-
-			document.onmousemove = function({clientX,clientY}){
-				var deltaX = clientX - disX;
-				var deltaY = clientY - disY;
-
-				oWrapper.style.transform = `translate(${deltaX}px,${deltaY}px)`;
-
-				oWrapper.dataset.left = deltaX;
-				oWrapper.dataset.top = deltaY;
-
-				if( Number(oWrapper.dataset.top) < -50 ){
-					oWrapper.style.border="1px solid rgba(71,195,167,0.5)"
-				} else {
-					oWrapper.style.border="1px solid rgba(0,0,0,0.5)"
-				}
-			}
-
-			document.onmouseup = function(){
-				document.onmousemove = null;
-				document.onmouseup = null;
-			}
-		}
-
 	</script>
 </body>
 </html>
